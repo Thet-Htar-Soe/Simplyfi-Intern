@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { saveAs } from "file-saver";
 import { Document, Packer, Paragraph, Table, TableCell, TableRow } from "docx";
 import jsPDF from "jspdf";
@@ -57,15 +57,19 @@ const App = () => {
 
   const generatePdf = () => {
     const input = document.getElementById("table-to-pdf");
-    html2canvas(input).then((canvas) => {
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, "PNG", 10, 10);
-      pdf.save("EmployeeTable.pdf");
-    });
+    if (input) {
+      html2canvas(input).then((canvas) => {
+        const imgData = canvas.toDataURL("image/png");
+        const pdf = new jsPDF();
+        pdf.addImage(imgData, "PNG", 10, 10, 100, 100);
+        pdf.save("EmployeeTable.pdf");
+      });
+    } else {
+      console.error("input cannot be found");
+    }
   };
 
-  const handleDownload = (option) => {
+  const handleDownload = (option: any) => {
     if (option === "docx") {
       generateDocx();
     } else if (option === "pdf") {
@@ -81,7 +85,7 @@ const App = () => {
       <button onClick={() => setShowModal(true)} style={{ margin: "30px 0px" }}>
         Download Table
       </button>
-      <table border="1" id="table-to-pdf">
+      <table border={1} id="table-to-pdf">
         <thead>
           <tr>
             <th>Name</th>
@@ -101,15 +105,15 @@ const App = () => {
       </table>
 
       {showModal && (
-        <div style={styles.modalOverlay}>
-          <div style={styles.modalContent}>
+        <div style={modalOverlay}>
+          <div style={modalContent}>
             <h2>Select Format to Download</h2>
-            <div style={styles.iconContainer}>
-              <div style={styles.iconWrapper} onClick={() => handleDownload("docx")}>
+            <div style={iconContainer}>
+              <div style={iconWrapper} onClick={() => handleDownload("docx")}>
                 <FaFileWord size={60} color="blue" />
                 <p>Download as .docx</p>
               </div>
-              <div style={styles.iconWrapper} onClick={() => handleDownload("pdf")}>
+              <div style={iconWrapper} onClick={() => handleDownload("pdf")}>
                 <FaFilePdf size={60} color="red" />
                 <p>Download as .pdf</p>
               </div>
@@ -123,34 +127,34 @@ const App = () => {
 };
 
 // Styles for modal box
-const styles = {
-  modalOverlay: {
-    position: "fixed",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1000,
-  },
-  modalContent: {
-    backgroundColor: "white",
-    padding: "20px",
-    borderRadius: "8px",
-    textAlign: "center",
-  },
-  iconContainer: {
-    display: "flex",
-    justifyContent: "space-around",
-    margin: "20px 0",
-  },
-  iconWrapper: {
-    cursor: "pointer",
-    textAlign: "center",
-  },
+const modalOverlay: any = {
+  position: "fixed",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: "rgba(0, 0, 0, 0.5)",
+  display: "flex",
+  justifyContent: "center",
+  alignItems: "center",
+  zIndex: 1000,
+};
+const modalContent: any = {
+  backgroundColor: "white",
+  padding: "20px",
+  borderRadius: "8px",
+  textAlign: "center",
+};
+
+const iconContainer: any = {
+  display: "flex",
+  justifyContent: "space-around",
+  margin: "20px 0",
+};
+
+const iconWrapper: any = {
+  cursor: "pointer",
+  textAlign: "center",
 };
 
 export default App;
