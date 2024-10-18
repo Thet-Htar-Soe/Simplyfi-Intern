@@ -10,6 +10,7 @@ const App = () => {
     setResult("");
   };
   const calculate = () => {
+    // cmsdlka;
     try {
       setResult(eval(result).toString());
     } catch (error) {
